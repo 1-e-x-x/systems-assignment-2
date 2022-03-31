@@ -48,9 +48,8 @@ public class App {
         return toReturn;
     }
     public static void main(String[] args) {
-        ArrayList<String> testus = csvReader(new File("C:\\Users\\Alex\\Desktop\\systems assignment 2\\airline_safety.csv"));
+        ArrayList<String> testus = csvReader(new File("src\\main\\resources\\airline_safety.csv"));
         String[][] testus2 = convert2D(testus);
         System.out.println(testus2[testus.size()-1][5]);
-
     }
 }
