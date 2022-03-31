@@ -18,6 +18,7 @@ public class App {
            while(scanner.hasNext()){
                toReturn.add(scanner.next());
            }
+           scanner.close();
            return toReturn;
     }
        catch (Exception error){
@@ -48,12 +49,8 @@ public class App {
     }
     public static void main(String[] args) {
         ArrayList<String> testus = csvReader(new File("C:\\Users\\Alex\\Desktop\\systems assignment 2\\airline_safety.csv"));
-        System.out.println(testus.get(0));
-        int numColumns = testus.get(0).split(",").length;
-        System.out.println(numColumns);
-
         String[][] testus2 = convert2D(testus);
-        System.out.println(testus2[0][1]);
+        System.out.println(testus2[testus.size()-1][5]);
 
     }
 }
