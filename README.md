@@ -9,7 +9,13 @@ Project:
 - File IO and data processing
   
 ## Sections
+
+*Note:* each image displayed is also available in the **>docs_&\_submission** directory
+
+<img align="right" src="https://github.com/1-e-x-x/systems-assignment-2/blob/main/docs_%26_submission/converted.PNG" height="200">
+
 ### Part 1:
+
 Task: read a .csv file, add a column, and output to a new .xml file
 
 This functionality is achieved through the **input()** function, which takes the filepath of a .csv file and reads it into a 2-dimensional array of strings.
@@ -17,6 +23,9 @@ This functionality is achieved through the **input()** function, which takes the
 Finally, the **output()** function writes a 2-dimensional array of strings to a .xml file, assuming that the first row of data is column titles.
 
 ### Part 2:
+
+<img align="right" src="https://github.com/1-e-x-x/systems-assignment-2/blob/main/docs_%26_submission/summary.PNG" height="200">
+
 Task: summarize the data of the previous .csv file and output the summary as a new .xml file
 
 This is done through the use of the **summarize()** function, which takes the same format of data as the previous section and loops through each row in the table to total the data. The function then formats the summary into a new .xml file, once again assuming the first row of data is column titles.
@@ -26,4 +35,6 @@ This section also makes use of a ColumnData class which stores and updates the s
 ### Part 3:
 Task: use JavaFX to display data from the table as a bar chart
 
-*Not yet done*
+The **start()** function of the program starts the JavaFX platform. Through this function, we have created, populated, and displayed the requested bar chart in a manner to fit the chart to the size of the window.
+
+<img src="https://github.com/1-e-x-x/systems-assignment-2/blob/main/docs_%26_submission/window.PNG">
