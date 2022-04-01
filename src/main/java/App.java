@@ -1,7 +1,8 @@
+import javafx.scene.chart.*;
+import javafx.scene.layout.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -13,26 +14,32 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class App {
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
+public class App extends Application {
     //takes a csv filepath and converts to a 2d arraylist of strings
     public static ArrayList<ArrayList<String>> input(String filename){
         try (Scanner reader = new Scanner(new File(filename))){
             ArrayList<ArrayList<String>> output = new ArrayList<>();
             reader.useDelimiter("\n");
-            while (reader.hasNext()) {
+            while (reader.hasNext()) { //split by line
                 output.add(new ArrayList<>());
-                for(String x : reader.next().split(",")) output.get(output.size()-1).add(x);
-                if (reader.hasNext()) output.get(output.size()-1).set(output.get(output.size()-1).size()-1, output.get(output.size()-1).get(output.get(output.size()-1).size()-1)
-                        .substring(0, output.get(output.size()-1).get(output.get(output.size()-1).size()-1).length()-1)); //lol fix this later
+                for(String x : reader.next().split(",")) output.get(output.size()-1).add(x); //split each element in the line
+
+                if (reader.hasNext()){ //removes the newline/carriage-return delimiter
+                    ArrayList<String> temp = output.get(output.size()-1);
+                    temp.set(temp.size()-1, temp.get(temp.size()-1).substring(0, temp.get(temp.size()-1).length()-1));
+                }
             }
             return output;
         } catch (IOException e){
             e.printStackTrace();
+            System.out.println("\nIO Exception thrown. Maybe the file doesn't exist?");
             return null;
         }
     }
@@ -161,10 +168,42 @@ public class App {
         } catch (IOException | TransformerException e) { e.printStackTrace(); }
     }
 
-    public static void main(String[] args) throws ParserConfigurationException {
-        ArrayList<ArrayList<String>> test = processData(input("src\\main\\resources\\airline_safety.csv"));
-        //for (ArrayList<String> x : test) for (String y : x) System.out.println(y); //outputs entire struct line by line
-        summarize(test);
-        output(test);
+    public void start(Stage primaryStage) throws IOException, ParserConfigurationException {
+        ArrayList<ArrayList<String>> data = processData(input("src\\main\\resources\\airline_safety.csv"));
+        output(data);
+        summarize(data);
+
+        //JavaFX App (part 3)
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Airline");
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Fatal Incidents");
+
+        BarChart barChart = new BarChart(xAxis, yAxis);
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("1985-1999");
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName("2000-2014");
+
+        boolean first = true;
+        for (ArrayList<String> x : data) {
+            if (first == true) first = false;
+            else {
+                series1.getData().add(new XYChart.Data(x.get(0), Integer.valueOf(x.get(3))));
+                series2.getData().add(new XYChart.Data(x.get(0), Integer.valueOf(x.get(6))));
+            }
+        }
+
+        barChart.getData().addAll(series1, series2);
+
+        primaryStage.setTitle("CSCI2020U Assignment 2: E. Kelly & A. Sawatzky");
+        primaryStage.setScene(new Scene(new AnchorPane(barChart), 1200, 800));
+        AnchorPane.setBottomAnchor(barChart, 10.0);
+        AnchorPane.setTopAnchor(barChart, 10.0);
+        AnchorPane.setLeftAnchor(barChart, 10.0);
+        AnchorPane.setRightAnchor(barChart, 10.0);
+        primaryStage.show();
     }
+
+    public static void main(String[] args) {Application.launch(args);}
 }
