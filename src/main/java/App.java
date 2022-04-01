@@ -13,9 +13,11 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -45,7 +47,8 @@ public class App extends Application {
     }
 
     //adds a column representing total number of incidents to the arraylist of flight data
-    public static ArrayList<ArrayList<String>> processData(ArrayList<ArrayList<String>> data){
+    public static ArrayList<ArrayList<String>> processData(ArrayList<ArrayList<String>> data, String filename) throws IOException {
+        if (data.get(0).get(data.get(0).size()-1) == "total_incidents") return data;
         boolean first = true;
         for (ArrayList<String> x : data) {
             if (first == true) {
@@ -54,6 +57,11 @@ public class App extends Application {
             }
             else x.add(Integer.toString(Integer.valueOf(x.get(2)) + Integer.valueOf(x.get(5))));
         }
+
+        //write new data to csv
+        FileWriter output = new FileWriter(filename);
+        for (ArrayList<String> x : data) output.write(x.stream().collect(Collectors.joining(",")) + "\n");
+        output.close();
         return data;
     }
 
@@ -169,7 +177,8 @@ public class App extends Application {
     }
 
     public void start(Stage primaryStage) throws IOException, ParserConfigurationException {
-        ArrayList<ArrayList<String>> data = processData(input("src\\main\\resources\\airline_safety.csv"));
+        //for testing purposes and because you shouldn't overwrite the original data file, I've set it to write to a second file instead of the original
+        ArrayList<ArrayList<String>> data = processData(input("src\\main\\resources\\airline_safety.csv"), "src\\main\\resources\\airline_safety2.csv");
         output(data);
         summarize(data);
 
