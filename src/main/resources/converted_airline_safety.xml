@@ -557,7 +557,7 @@
         <fatalities_85_99>82</fatalities_85_99>
         <incidents_00_14>2</incidents_00_14>
         <fatal_accidents_00_14>0</fatal_accidents_00_14>
-        <fatalities_00_14/>
+        <fatalities_00_14>0</fatalities_00_14>
         <total_incidents>11</total_incidents>
     </Airline>
 </Flight_Data>
